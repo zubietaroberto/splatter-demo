@@ -44,10 +44,11 @@ export function Timeline() {
 
   useEffect(() => {
     async function getPosts() {
-      if (!profileId || !lensContract) return;
+      if (!profileId || !signer) return;
 
-      const count = await lensContract.getPubCount(profileId);
-      const pub = await lensContract.getPub(profileId, count);
+      const localcontract = LensHub__factory.connect(LENS_HUB_ADDRESS, signer);
+      const count = await localcontract.getPubCount(profileId);
+      const pub = await localcontract.getPub(profileId, count);
 
       setPosts([
         {
@@ -59,7 +60,7 @@ export function Timeline() {
     }
 
     getPosts();
-  }, [lensContract]);
+  }, [signer, profileId]);
 
   async function post() {
     if (!profileId || !input || !signer) {
@@ -68,17 +69,19 @@ export function Timeline() {
     }
 
     const contentURI = input;
-    return LensHub__factory.connect(LENS_HUB_ADDRESS, signer).post(
-      {
-        profileId,
-        contentURI: 'http://',
-        collectModule: freeCollectModuleAddr,
-        collectModuleInitData: defaultAbiCoder.encode(['bool'], [true]),
-        referenceModule: ZERO_ADDRESS,
-        referenceModuleInitData: [],
-      },
-      { gasLimit: '1000000' }
-    );
+    return LensHub__factory.connect(LENS_HUB_ADDRESS, signer)
+      .connect(signer)
+      .post(
+        {
+          profileId,
+          contentURI: 'http://',
+          collectModule: freeCollectModuleAddr,
+          collectModuleInitData: defaultAbiCoder.encode(['bool'], [true]),
+          referenceModule: ZERO_ADDRESS,
+          referenceModuleInitData: [],
+        },
+        { gasLimit: '1000000' }
+      );
   }
 
   return (
