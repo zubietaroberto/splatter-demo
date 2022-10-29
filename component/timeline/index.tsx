@@ -69,19 +69,18 @@ export function Timeline() {
     }
 
     const contentURI = input;
-    return LensHub__factory.connect(LENS_HUB_ADDRESS, signer)
-      .connect(signer)
-      .post(
-        {
-          profileId,
-          contentURI: 'http://',
-          collectModule: freeCollectModuleAddr,
-          collectModuleInitData: defaultAbiCoder.encode(['bool'], [true]),
-          referenceModule: ZERO_ADDRESS,
-          referenceModuleInitData: [],
-        },
-        { gasLimit: '1000000' }
-      );
+    const contract = LensHub__factory.connect(LENS_HUB_ADDRESS, signer);
+    return contract.connect(signer).post(
+      {
+        profileId,
+        contentURI,
+        collectModule: freeCollectModuleAddr,
+        collectModuleInitData: defaultAbiCoder.encode(['bool'], [true]),
+        referenceModule: ZERO_ADDRESS,
+        referenceModuleInitData: [],
+      },
+      { gasLimit: '1000000' }
+    );
   }
 
   return (
