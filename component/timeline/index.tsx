@@ -95,8 +95,11 @@ export function Timeline() {
         return (
           <div key={p.postId.toString()}>
             <hr />
-            <h2>SPLAT:</h2>
-            <div>{p.text}</div>
+            <h2>Splat:</h2>
+            <div>
+              <b>Blockchain says: </b>
+              {p.text}
+            </div>
           </div>
         );
       })}
