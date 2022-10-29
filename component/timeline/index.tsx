@@ -91,13 +91,14 @@ export function Timeline() {
       <h2>Profile</h2>
       <b>{`Username: ${HARDCODED_HANDLE}`}</b>
       {profileId && <div>{`User ID: ${profileId.toString()}`}</div>}
+
+      <hr />
+      <h2>My Splats:</h2>
       {posts.map((p) => {
         return (
           <div key={p.postId.toString()}>
-            <hr />
-            <h2>Splat:</h2>
             <div>
-              <b>Blockchain says: </b>
+              <b>{HARDCODED_HANDLE} says on Ethereum: </b>
               {p.text}
             </div>
           </div>
